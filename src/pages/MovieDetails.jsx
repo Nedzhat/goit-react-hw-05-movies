@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { serchMovieForId } from "services/api-findById";
+import { Link, useParams, Outlet } from "react-router-dom";
 
+import { serchMovieForId } from "services/api-findById";
 
 export const MovieDetails = () => { 
     const [movie, setMovie] = useState({});
@@ -10,26 +10,51 @@ export const MovieDetails = () => {
     useEffect(() => {
     serchMovieForId(id).then(res => {
         setMovie(res)
-        console.log(res);
   }).catch(console.error());    
     }, [id])
-    
+  
+  const arrOfGenres = (genres) => {
+    if (!genres) {
+      return;
+    }
+    let arr = [];
+    for (let i = 0; i < genres.length; i++) {
+      arr.push(genres[i].name);
+      arr.push(' ');
+    }
+    return arr;
+  }
+  const { poster_path, title, release_date, vote_average, overview, genres } = movie;
   return (
     <main>
-          <img width='200px' src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`} alt="" />
+      <button type="button">Go back</button>
+      <div style={{display:"flex", borderBottom:"1px solid black"}}>
+      <img width='200px' src={`https://image.tmdb.org/t/p/original/${poster_path}`} alt="Film" />
       <div>
         <h2>
-          Movie - {movie.title} - {id}
+          Movie - {title} {`(${release_date})`}
         </h2>
         <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloribus
-          sunt excepturi nesciunt iusto dignissimos assumenda ab quae cupiditate
-          a, sed reprehenderit? Deleniti optio quasi, amet natus reiciendis
-          atque fuga dolore? Lorem, ipsum dolor sit amet consectetur adipisicing
-          elit. Impedit suscipit quisquam incidunt commodi fugiat aliquam
-          praesentium ipsum quos unde voluptatum?
-        </p>
+          User Score: {`${parseInt(vote_average*10)}%`}
+          </p>
+          <h3>Overiew</h3>
+          <p>{overview}</p>
+          <h3>Genres</h3>
+          <p>{arrOfGenres(genres)}</p>
+        </div>
       </div>
+      <div>
+        <p>Additional information</p>
+        <ul>
+          <li>
+          <Link to="cast"><p>Cast</p></Link>
+        </li>
+        <li>
+          <Link to="reviews"><p>Reviews</p></Link>
+          </li>
+        </ul>
+      </div>
+      <Outlet />
     </main>
   );
 };
