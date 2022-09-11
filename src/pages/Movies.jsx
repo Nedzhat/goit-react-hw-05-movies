@@ -7,7 +7,8 @@ import { fetchSearchMovies } from "services/api-search";
 export const Movies = () => {
     const [query, setQuery] = useState('');
     const [movies, setMovies] = useState([]);
-    const [searchParams, setSearchParams] = useSearchParams();
+    // eslint-disable-next-line
+    const [searchParams, setSearchParams] = useSearchParams(); 
 
     useEffect(() => {
         if (query === '') {
@@ -34,12 +35,12 @@ export const Movies = () => {
                 <button type="submit">Submit</button>
             </form>
             {movies && <ul>
-          {
-            movies.map(({id, title}) => (
-                <Link to={`${id}`} key={id}><p>{title}</p></Link>
-            ))
+          {     
+              movies.map(({id, title}) => (
+                  <Link to={`${id}`} key={id}><p>{title}</p></Link>
+                  ))
         }
-        </ul>}
+        </ul>}       
     </main>
     )
 }
