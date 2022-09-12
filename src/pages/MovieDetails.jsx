@@ -10,7 +10,7 @@ export const MovieDetails = () => {
     useEffect(() => {
     serchMovieForId(id).then(res => {
         setMovie(res)
-  }).catch(console.error());    
+  }).catch(console.log);    
     }, [id])
   
   const arrOfGenres = (genres) => {
@@ -20,11 +20,19 @@ export const MovieDetails = () => {
     let arr = [];
     for (let i = 0; i < genres.length; i++) {
       arr.push(genres[i].name);
-      arr.push(' ');
     }
     return arr;
   }
+
   const { poster_path, title, release_date, vote_average, overview, genres } = movie;
+
+  const fixReleaseDate = (date) => {
+    if (!date) {
+      return;
+    }
+    return date.slice(0, 4);
+  }
+
   return (
     <main>
       <button type="button">Go back</button>
@@ -32,7 +40,7 @@ export const MovieDetails = () => {
       <img width='200px' src={`https://image.tmdb.org/t/p/original/${poster_path}`} alt="Film" />
       <div>
         <h2>
-          Movie - {title} {`(${release_date})`}
+          Movie - {title} {`(${fixReleaseDate(release_date)})`}
         </h2>
         <p>
           User Score: {`${parseInt(vote_average*10)}%`}
@@ -40,7 +48,9 @@ export const MovieDetails = () => {
           <h3>Overiew</h3>
           <p>{overview}</p>
           <h3>Genres</h3>
-          <p>{arrOfGenres(genres)}</p>
+          <ul>{genres && arrOfGenres(genres).map(genre => (
+            <li key={genre}>{ genre }</li>
+          ))}</ul>
         </div>
       </div>
       <div>

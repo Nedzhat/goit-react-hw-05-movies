@@ -9,7 +9,7 @@ export const Home = () => {
   useEffect(() => {
     fetchMovies().then(res => {
         setTrends(res)
-  }).catch(console.error());
+  }).catch(console.log());
   },[])
 
     return (
