@@ -1,11 +1,14 @@
-import { useState, useEffect } from "react";
-import { Link, useParams, Outlet } from "react-router-dom";
+import { useState, useEffect, Suspense } from "react";
+import { Link, useParams, Outlet, useLocation } from "react-router-dom";
 
 import { serchMovieForId } from "services/api-findById";
+import { LinkGoBack } from "./MovieDetails.styled";
 
-export const MovieDetails = () => { 
+const MovieDetails = () => { 
     const [movie, setMovie] = useState({});
-    const { id } = useParams();
+  const { id } = useParams();
+  const location = useLocation();
+  const backLinkHref = location.state?.from ?? "/";
 
     useEffect(() => {
     serchMovieForId(id).then(res => {
@@ -35,12 +38,12 @@ export const MovieDetails = () => {
 
   return (
     <main>
-      <button type="button">Go back</button>
-      <div style={{display:"flex", borderBottom:"1px solid black"}}>
-      <img width='200px' src={`https://image.tmdb.org/t/p/original/${poster_path}`} alt="Film" />
-      <div>
-        <h2>
-          Movie - {title} {`(${fixReleaseDate(release_date)})`}
+      <LinkGoBack to={backLinkHref} style={{ textDecoration: 'none' }}>Go Back</LinkGoBack>
+      <div style={{display:"flex", borderBottom:"1px solid black", padding:"30px"}}>
+      <img src={`https://image.tmdb.org/t/p/w200/${poster_path}`} alt="Film" />
+      <div style={{padding:"0 0 0 20px"}}>
+        <h2 style={{margin:"0"}}>
+          {title} {`(${fixReleaseDate(release_date)})`}
         </h2>
         <p>
           User Score: {`${parseInt(vote_average*10)}%`}
@@ -53,18 +56,22 @@ export const MovieDetails = () => {
           ))}</ul>
         </div>
       </div>
-      <div>
+      <div style={{borderBottom:"1px solid black"}}>
         <p>Additional information</p>
         <ul>
           <li>
-          <Link to="cast"><p>Cast</p></Link>
+          <Link to="cast" state={{ from: "/" }}><p>Cast</p></Link>
         </li>
         <li>
-          <Link to="reviews"><p>Reviews</p></Link>
+          <Link to="reviews" state={{ from: "/" }}><p>Reviews</p></Link>
           </li>
         </ul>
       </div>
-      <Outlet />
+      <Suspense fallback={<div>Loading page...</div>}>
+            <Outlet />
+      </Suspense>
     </main>
   );
 };
+
+export default MovieDetails;

@@ -3,14 +3,14 @@ import { useParams } from "react-router-dom";
 
 import { serchCastForId } from "services/api-findCast";
 
-export const Cast = () => {
+const Cast = () => {
     const [cast, setCast] = useState([]);
     const { id } = useParams();
 
     useEffect(() => {
     serchCastForId(id).then(res => {
         setCast(res)
-  }).catch(console.error());    
+  }).catch(console.log());    
     }, [id])
 
     return (
@@ -27,3 +27,5 @@ export const Cast = () => {
         </div>
     )
 }
+
+export default Cast;

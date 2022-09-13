@@ -3,14 +3,14 @@ import { useParams } from "react-router-dom";
 
 import { serchReviewsForId } from "services/api-findReviews";
 
-export const Reviews = () => {
+const Reviews = () => {
     const [reviews, setReviews] = useState([]);
     const { id } = useParams();
 
     useEffect(() => {
     serchReviewsForId(id).then(res => {
         setReviews(res)
-  }).catch(console.error());    
+  }).catch(console.log());    
     }, [id])
     
     return (
@@ -26,3 +26,5 @@ export const Reviews = () => {
         </div>
     )
 }
+
+export default Reviews;

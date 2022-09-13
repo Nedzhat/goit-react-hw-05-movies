@@ -2,9 +2,10 @@ import { useState, useEffect } from "react"
 import { Link, useSearchParams } from "react-router-dom";
 
 import { fetchSearchMovies } from "services/api-search";
+import { ListOfFilms, FilmItem, NameOfFilm } from "pages/Home/Home.styled";
 
 
-export const Movies = () => {
+    const Movies = () => {
     const [query, setQuery] = useState('');
     const [movies, setMovies] = useState([]);
     // eslint-disable-next-line
@@ -27,20 +28,24 @@ export const Movies = () => {
         updateQueryString(e.target.elements.query.value);
         setQuery(e.target.elements.query.value);
     }
-
+    
     return ( 
         <main>
             <form onSubmit={handleSubmit}>
                 <input type="text" name="query" />
                 <button type="submit">Submit</button>
             </form>
-            {movies && <ul>
-          {     
-              movies.map(({id, title}) => (
-                  <Link to={`${id}`} key={id}><p>{title}</p></Link>
+            {movies && <ListOfFilms>
+          {movies.map(({ id, title, poster_path }) => (
+                        <FilmItem key={id}><Link to={`${id}`} state={{ from: "/movies" }} style={{ textDecoration: 'none' }}>
+                            <NameOfFilm>{title}</NameOfFilm>
+                            <img src={`https://image.tmdb.org/t/p/w200/${poster_path}`} alt="Film" />
+                            </Link></FilmItem>
                   ))
         }
-        </ul>}       
+        </ListOfFilms>}       
     </main>
     )
-}
+    }
+
+export default Movies;
