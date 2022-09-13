@@ -12,8 +12,7 @@ const Reviews = () => {
             return;
         }
     serchReviewsForId(id).then(res => {
-        setReviews(res)
-        console.log(res);
+        setReviews(res);
   }).catch(console.log());    
     }, [id])
     
