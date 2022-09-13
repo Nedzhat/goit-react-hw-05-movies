@@ -8,8 +8,12 @@ const Reviews = () => {
     const { id } = useParams();
 
     useEffect(() => {
+        if (!id) {
+            return;
+        }
     serchReviewsForId(id).then(res => {
         setReviews(res)
+        console.log(res);
   }).catch(console.log());    
     }, [id])
     
