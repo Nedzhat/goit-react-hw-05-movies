@@ -8,24 +8,13 @@ const MovieDetails = () => {
     const [movie, setMovie] = useState({});
   const { id } = useParams();
   const location = useLocation();
-  const backLinkHref = location.state?.from ?? "/";
-
+  const backLinkHref = location.state?.from ?? "/movies";
+  
     useEffect(() => {
     serchMovieForId(id).then(res => {
         setMovie(res)
-  }).catch(console.log);    
+    }).catch(console.log);    
     }, [id])
-  
-  const arrOfGenres = (genres) => {
-    if (!genres) {
-      return;
-    }
-    let arr = [];
-    for (let i = 0; i < genres.length; i++) {
-      arr.push(genres[i].name);
-    }
-    return arr;
-  }
 
   const { poster_path, title, release_date, vote_average, overview, genres } = movie;
 
@@ -51,19 +40,17 @@ const MovieDetails = () => {
           <h3>Overiew</h3>
           <p>{overview}</p>
           <h3>Genres</h3>
-          <ul>{genres && arrOfGenres(genres).map(genre => (
-            <li key={genre}>{ genre }</li>
-          ))}</ul>
+          {genres && genres.map(genre => genre.name).join(", ")}
         </div>
       </div>
       <div style={{borderBottom:"1px solid black"}}>
         <p>Additional information</p>
         <ul>
           <li>
-          <Link to="cast" state={{ from: "/" }}><p>Cast</p></Link>
+          <Link to="cast" state={{from: location.state.from}}><p>Cast</p></Link>
         </li>
         <li>
-          <Link to="reviews" state={{ from: "/" }}><p>Reviews</p></Link>
+          <Link to="reviews" state={{from: location.state.from}}><p>Reviews</p></Link>
           </li>
         </ul>
       </div>

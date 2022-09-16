@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 
 import { fetchSearchMovies } from "services/api-search";
 import { ListOfFilms, FilmItem, NameOfFilm } from "pages/Home/Home.styled";
@@ -10,13 +10,18 @@ import { ListOfFilms, FilmItem, NameOfFilm } from "pages/Home/Home.styled";
     const [movies, setMovies] = useState([]);
     // eslint-disable-next-line
     const [searchParams, setSearchParams] = useSearchParams(); 
-
-    useEffect(() => {
+        const location = useLocation();
+        const lastQuery = searchParams.get('query');
+        
+        useEffect(() => {
+        if (lastQuery) {
+            setQuery(lastQuery);
+        }
         if (query === '') {
             return;
         }
         fetchSearchMovies(query).then(res => setMovies(res));
-    }, [query])
+    }, [query,lastQuery])
     
     const updateQueryString = (query) => {
     const nextParams = query !== "" ? { query } : {};
@@ -37,7 +42,7 @@ import { ListOfFilms, FilmItem, NameOfFilm } from "pages/Home/Home.styled";
             </form>
             {movies && <ListOfFilms>
           {movies.map(({ id, title, poster_path }) => (
-                        <FilmItem key={id}><Link to={`${id}`} state={{ from: "/movies" }} style={{ textDecoration: 'none' }}>
+                        <FilmItem key={id}><Link to={`${id}`} state={{ from: location }} style={{ textDecoration: 'none' }}>
                             <NameOfFilm>{title}</NameOfFilm>
                             <img src={`https://image.tmdb.org/t/p/w200/${poster_path}`} alt="Film" />
                             </Link></FilmItem>

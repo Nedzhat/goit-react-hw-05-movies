@@ -6,7 +6,7 @@ import { serchCastForId } from "services/api-findCast";
 const Cast = () => {
     const [cast, setCast] = useState([]);
     const { id } = useParams();
-
+        
     useEffect(() => {
     serchCastForId(id).then(res => {
         setCast(res)
